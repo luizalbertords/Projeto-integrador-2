@@ -2,38 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 main(List<String> args) {
-  runApp(Calculadora());
+  runApp(CalculadoraCombustivel());
 }
 
-class Calculadora extends StatefulWidget {
+class CalculadoraCombustivel extends StatefulWidget {
   @override
-  _CalculadoraState createState() => _CalculadoraState();
+  _CalculadoraCombustivelState createState() => _CalculadoraCombustivelState();
 }
 
-class _CalculadoraState extends State<Calculadora> {
-  String resultadofinal = '';
-  double resultado = 0.0;
-  String valor2 = '';
-  String valor1 = '';
-  String operador = '';
+class _CalculadoraCombustivelState extends State<CalculadoraCombustivel> {
+  String melhorCombustivel = '';
 
-  void calcular() {
+  double resultado = 0.0;
+
+  String etanol = '';
+
+  String gasolina = '';
+
+  void calcularcombustivel() {
     setState(() {
-      
-      double numero1 = double.parse(valor1.toString());
-      double numero2 = double.parse(valor2.toString());
-      if (operador == '+') {
-        resultado = numero1 + numero2;
-        resultadofinal = resultado.toString();
-      } else if (operador == '-') {
-        resultado = numero1 - numero2;
-        resultadofinal = resultado.toString();
-      } else if (operador == '/') {
-        resultado = numero1 / numero2;
-        resultadofinal = resultado.toString();
+      double valorGasolina = double.parse(gasolina.toString());
+      double valorEtanol = double.parse(etanol.toString());
+      resultado = valorEtanol / valorGasolina;
+      if (resultado < 0.7) {
+        melhorCombustivel = 'Etanol';
+      } else if (resultado >= 0.7) {
+        melhorCombustivel = 'Gasolina';
       } else {
-        resultado = numero1 * numero2;
-        resultadofinal = resultado.toString();
+        melhorCombustivel = 'Erro ao calcular';
       }
     });
   }
@@ -46,73 +42,45 @@ class _CalculadoraState extends State<Calculadora> {
         //tela
         appBar: AppBar(
           //title
-          title: Center(
-            child: Text(
-              'Calculadora Simples',
-            ),
-          ),
+          title: Center(child: Text('Calculadora de Combustivel:.')),
         ),
         body: Padding(
           padding: const EdgeInsets.all(50),
           child: Column(
             children: [
-              Center(
-                child: Text(
-                  'Calcule facil',
-                  style: TextStyle(fontSize: 30, color: Colors.red),
-                ),
-              ),
+              Center(child: Text('Bora Economizar')),
               TextFormField(
                 decoration: InputDecoration(
                   border: UnderlineInputBorder(),
                   hintText: 'Informe numeros',
-                  labelText: 'Informe o Primeiro valor',
-                  labelStyle: TextStyle(color: Colors.red, fontSize: 25),
-                  
+                  icon: Icon(Icons.local_gas_station),
+                  labelText: 'Informe o Preço da Gasolina',
                 ),
                 onChanged: (valor) {
-                  valor1 = valor.replaceAll(',', '.');
+                  gasolina = valor.replaceAll(',', '.');
                   //.replaceAll transforma um item em outro
                 },
               ),
               TextFormField(
                 decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
+                  border: OutlineInputBorder(),
                   hintText: 'Informe numeros',
-                  labelText: 'Informe o segundo valor',
-                  labelStyle: TextStyle(color: Colors.red, fontSize: 25),
+                  icon: Icon(Icons.local_gas_station),
+                  labelText: 'Informe o Preço do Alcool',
                 ),
                 onChanged: (valor) {
-                  valor2 = valor.replaceAll(',', '.');
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelStyle: TextStyle(color: Colors.red, fontSize: 25),
-                  hintText: 'Informe numeros',
-                  labelText: 'Operador',
-                ),
-                onChanged: (valor) {
-                  operador = valor;
+                  etanol = valor.replaceAll(',', '.');
                 },
               ),
               Padding(
                 padding: const EdgeInsets.all(40.0),
                 child: ElevatedButton(
-                  onPressed: calcular,
-                  child: Text('CALCULAR',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.red,
-                      )),
+                  onPressed: calcularcombustivel,
+                  child: Text('calcular'),
                 ),
               ),
-              Center(
-                  child: Text(
-                'Seu resultado é:',
-              )),
-              Text('$resultadofinal')
+              Center(child: Text('Melhor Combustivel:')),
+              Text('$melhorCombustivel')
             ],
           ),
         ),
